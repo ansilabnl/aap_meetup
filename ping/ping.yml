@@ -1,0 +1,48 @@
+---
+- name: Ping all hosts
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Show some system info
+      debug:
+        msg:
+          - Hostname            = {{ ansible_facts['hostname'] }}
+          - FQDN                = {{ ansible_facts['fqdn'] }}
+          - IP address          = {{ ansible_facts['default_ipv4']['address'] | default('Unknown') }}
+          - Architecture        = {{ ansible_facts['architecture'] }}
+          - OS family           = {{ ansible_facts['os_family'] }}
+          - OS Distribution     = {{ ansible_facts['distribution'] }}
+          - OS Major version    = {{ ansible_facts['distribution_major_version'] }}
+          - OS Version          = {{ ansible_facts['distribution_version'] }}
+          - Memory (MB)         = {{ ansible_facts['memtotal_mb'] }}
+          - Processor cores     = {{ ansible_facts['processor_cores'] }}
+          - Virtualization role = {{ ansible_facts['virtualization_role'] }}
+          - Decrypted password  = {{ my_passwd | default('Unknown')}}
+          - "{{ '{:=^70}'.format(' Local facts ') }}"
+          - System function     = {{ ansible_local['sysinfo']['system']['function'] | default('Unknown') }}
+          - System Location     = {{ ansible_local['sysinfo']['system']['location'] | default('Unknown') }}
+          - System VMware name  = {{ ansible_local['sysinfo']['system']['vmware_name'] | default('Unknown') }}
+
+    - name: Convert skills to list, if defined
+      ansible.builtin.set_fact:
+        skill_list: "{{ skills.split('\n') }}"
+      when:
+        - skills is defined
+        - skills is string
+
+    - name: Show variable values when they are defined
+      debug:
+        msg:
+          - firstname = {{ firstname }}
+          - lastname  = {{ lastname }}
+          - skills    = {{ skill_list }}
+          - holiday   = {{ holiday | default('Stayed at home') }}
+      when:
+        - firstname  is defined
+        - lastname   is defined
+        - skill_list is defined
+
+    - name: just ping
+      ping:
+
