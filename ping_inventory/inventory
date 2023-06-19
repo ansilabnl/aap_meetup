@@ -1,6 +1,1 @@
 aap		ansible_host=aap.ansilab.nl		ansible_user=ansible
-
-[oracloud]
-ans		ansible_host=141.144.206.162	ansible_user=ansible
-arm		ansible_host=193.123.59.225		ansible_user=ansible
-ubu		ansible_host=143.47.185.175		ansible_user=ansible
