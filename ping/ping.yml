@@ -45,4 +45,3 @@
 
     - name: Just ping
       ansible.builtin.ping:
-
